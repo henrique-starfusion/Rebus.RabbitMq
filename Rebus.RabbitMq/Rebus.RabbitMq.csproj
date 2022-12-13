@@ -2,9 +2,8 @@
 <Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
 	<PropertyGroup>
 		<RootNamespace>Rebus</RootNamespace>
-		<LangVersion>10</LangVersion>
 		<AssemblyName>Rebus.RabbitMq</AssemblyName>
-		<TargetFrameworks>netstandard2.0</TargetFrameworks>
+		<TargetFramework>net7.0</TargetFramework>
 		<Authors>mookid8000</Authors>
 		<PackageProjectUrl>https://rebus.fm/what-is-rebus/</PackageProjectUrl>
 		<Copyright>Copyright Rebus FM ApS 2012</Copyright>
@@ -16,7 +15,7 @@
 		<PackageIcon>little_rebusbus2_copy-500x500.png</PackageIcon>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="rebus" Version="[6, 7)" />
+		<PackageReference Include="rebus" Version="6.6.5" />
 		<PackageReference Include="RabbitMq.Client" Version="6.4.0" />
 	</ItemGroup>
 	<ItemGroup>
