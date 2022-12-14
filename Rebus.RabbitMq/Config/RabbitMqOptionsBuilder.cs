@@ -417,7 +417,15 @@ public class RabbitMqOptionsBuilder
 
         public IConnection CreateConnection(IList<AmqpTcpEndpoint> endpoints)
         {
-            return (_decoratedFactory as ConnectionFactory)?.CreateConnection(_clientProvidedName);
+            try
+            {
+                return (_decoratedFactory as ConnectionFactory)?.CreateConnection(endpoints, _clientProvidedName);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return (_decoratedFactory as ConnectionFactory)?.CreateConnection(_clientProvidedName);
+            }
         }
 
         public IConnection CreateConnection()
@@ -442,7 +450,15 @@ public class RabbitMqOptionsBuilder
 
         public IConnection CreateConnection(IList<AmqpTcpEndpoint> endpoints, string clientProvidedName)
         {
-            return (_decoratedFactory as ConnectionFactory)?.CreateConnection(clientProvidedName);
+            try
+            {
+                return (_decoratedFactory as ConnectionFactory)?.CreateConnection(endpoints, clientProvidedName);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return (_decoratedFactory as ConnectionFactory)?.CreateConnection(clientProvidedName);
+            }
         }
     }
 }
