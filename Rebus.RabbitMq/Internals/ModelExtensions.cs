@@ -11,9 +11,7 @@ static class ModelExtensions
     internal static void SafeDrop(this IModel model)
     {
         if (model == null)
-        {
             return;
-        }
             
         try
         {

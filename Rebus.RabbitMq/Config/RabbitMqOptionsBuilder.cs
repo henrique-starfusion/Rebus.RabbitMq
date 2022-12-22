@@ -419,7 +419,7 @@ public class RabbitMqOptionsBuilder
         {
             try
             {
-                return (_decoratedFactory as ConnectionFactory)?.CreateConnection(endpoints, _clientProvidedName);
+                return (_decoratedFactory as ConnectionFactory)?.CreateConnection(_clientProvidedName);
             }
             catch (Exception ex)
             {
@@ -452,7 +452,7 @@ public class RabbitMqOptionsBuilder
         {
             try
             {
-                return (_decoratedFactory as ConnectionFactory)?.CreateConnection(endpoints, clientProvidedName);
+                return (_decoratedFactory as ConnectionFactory)?.CreateConnection(_clientProvidedName);
             }
             catch (Exception ex)
             {
