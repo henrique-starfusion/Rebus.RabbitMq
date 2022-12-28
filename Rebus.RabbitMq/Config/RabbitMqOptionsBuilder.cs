@@ -10,7 +10,7 @@ namespace Rebus.Config;
 /// </summary>
 public class RabbitMqOptionsBuilder
 {
-    private readonly Dictionary<string, string> _additionalClientProperties = new();
+    readonly Dictionary<string, string> _additionalClientProperties = new Dictionary<string, string>();
 
     /// <summary>
     /// Default name of the exchange of type DIRECT (used for point-to-point messaging)
@@ -334,74 +334,74 @@ public class RabbitMqOptionsBuilder
 
         public IDictionary<string, object> ClientProperties
         {
-            get => _decoratedFactory.ClientProperties;
-            set => _decoratedFactory.ClientProperties = value;
+            get { return _decoratedFactory.ClientProperties; }
+            set { _decoratedFactory.ClientProperties = value; }
         }
 
         public TimeSpan ContinuationTimeout
         {
-            get => _decoratedFactory.ContinuationTimeout;
-            set => _decoratedFactory.ContinuationTimeout = value;
+            get { return _decoratedFactory.ContinuationTimeout; }
+            set { _decoratedFactory.ContinuationTimeout = value; }
         }
 
         public TimeSpan HandshakeContinuationTimeout
         {
-            get => _decoratedFactory.HandshakeContinuationTimeout;
-            set => _decoratedFactory.HandshakeContinuationTimeout = value;
+            get { return _decoratedFactory.HandshakeContinuationTimeout; }
+            set { _decoratedFactory.HandshakeContinuationTimeout = value; }
         }
 
         public string Password
         {
-            get => _decoratedFactory.Password;
-            set => _decoratedFactory.Password = value;
+            get { return _decoratedFactory.Password; }
+            set { _decoratedFactory.Password = value; }
         }
 
         public ushort RequestedChannelMax
         {
-            get => _decoratedFactory.RequestedChannelMax;
-            set => _decoratedFactory.RequestedChannelMax = value;
+            get { return _decoratedFactory.RequestedChannelMax; }
+            set { _decoratedFactory.RequestedChannelMax = value; }
         }
 
         public uint RequestedFrameMax
         {
-            get => _decoratedFactory.RequestedFrameMax;
-            set => _decoratedFactory.RequestedFrameMax = value;
+            get { return _decoratedFactory.RequestedFrameMax; }
+            set { _decoratedFactory.RequestedFrameMax = value; }
         }
 
         public TimeSpan RequestedHeartbeat
         {
-            get => _decoratedFactory.RequestedHeartbeat;
-            set => _decoratedFactory.RequestedHeartbeat = value;
+            get { return _decoratedFactory.RequestedHeartbeat; }
+            set { _decoratedFactory.RequestedHeartbeat = value; }
         }
 
         public Uri Uri
         {
-            get => _decoratedFactory.Uri;
-            set => _decoratedFactory.Uri = value;
+            get { return _decoratedFactory.Uri; }
+            set { _decoratedFactory.Uri = value; }
         }
 
         public bool UseBackgroundThreadsForIO
         {
-            get => _decoratedFactory.UseBackgroundThreadsForIO;
-            set => _decoratedFactory.UseBackgroundThreadsForIO = value;
+            get { return _decoratedFactory.UseBackgroundThreadsForIO; }
+            set { _decoratedFactory.UseBackgroundThreadsForIO = value; }
         }
 
         public string UserName
         {
-            get => _decoratedFactory.UserName;
-            set => _decoratedFactory.UserName = value;
+            get { return _decoratedFactory.UserName; }
+            set { _decoratedFactory.UserName = value; }
         }
 
         public string VirtualHost
         {
-            get => _decoratedFactory.VirtualHost;
-            set => _decoratedFactory.VirtualHost = value;
+            get { return _decoratedFactory.VirtualHost; }
+            set { _decoratedFactory.VirtualHost = value; }
         }
 
         public string ClientProvidedName
         {
-            get => _decoratedFactory.ClientProvidedName;
-            set => _decoratedFactory.ClientProvidedName = value;
+            get { return _decoratedFactory.ClientProvidedName; }
+            set { _decoratedFactory.ClientProvidedName = value; }
         }
 
         public ConnectionFactoryClientNameDecorator(IConnectionFactory originalFacotry, string clientProvidedName)
@@ -417,15 +417,7 @@ public class RabbitMqOptionsBuilder
 
         public IConnection CreateConnection(IList<AmqpTcpEndpoint> endpoints)
         {
-            try
-            {
-                return (_decoratedFactory as ConnectionFactory)?.CreateConnection(_clientProvidedName);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-                return (_decoratedFactory as ConnectionFactory)?.CreateConnection(_clientProvidedName);
-            }
+            return (_decoratedFactory as RabbitMQ.Client.ConnectionFactory)?.CreateConnection(new DefaultEndpointResolver(endpoints), _clientProvidedName);
         }
 
         public IConnection CreateConnection()
@@ -450,15 +442,7 @@ public class RabbitMqOptionsBuilder
 
         public IConnection CreateConnection(IList<AmqpTcpEndpoint> endpoints, string clientProvidedName)
         {
-            try
-            {
-                return (_decoratedFactory as ConnectionFactory)?.CreateConnection(_clientProvidedName);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-                return (_decoratedFactory as ConnectionFactory)?.CreateConnection(clientProvidedName);
-            }
+            return (_decoratedFactory as RabbitMQ.Client.ConnectionFactory)?.CreateConnection(new DefaultEndpointResolver(endpoints), clientProvidedName);
         }
     }
 }

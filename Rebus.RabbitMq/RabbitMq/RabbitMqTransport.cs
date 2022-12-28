@@ -19,6 +19,7 @@ using Rebus.Config;
 using Rebus.Exceptions;
 using Rebus.Internals;
 using Headers = Rebus.Messages.Headers;
+using System.Net;
 // ReSharper disable AccessToDisposedClosure
 
 // ReSharper disable EmptyGeneralCatchClause
@@ -35,7 +36,6 @@ namespace Rebus.RabbitMq;
 /// </summary>
 public class RabbitMqTransport : AbstractRebusTransport, IDisposable, IInitializable, ISubscriptionStorage
 {
-
     /// <summary>
     /// <see cref="ShutdownEventArgs.ReplyCode"/> value that indicates that a queue does not exist
     /// </summary>
@@ -265,8 +265,6 @@ public class RabbitMqTransport : AbstractRebusTransport, IDisposable, IInitializ
         // bail out without creating a connection if there's no need for it
         if (!_declareExchanges && !_declareInputQueue && !_bindInputQueue) return;
 
-        var connection = _connectionManager.GetConnection();
-
         try
         {
             using var cancellationTokenSource = new CancellationTokenSource(delay: TimeSpan.FromSeconds(60));
@@ -275,6 +273,8 @@ public class RabbitMqTransport : AbstractRebusTransport, IDisposable, IInitializ
             {
                 try
                 {
+                    var connection = _connectionManager.GetConnection();
+
                     using var model = connection.CreateModel();
 
                     const bool durable = true;
@@ -307,6 +307,44 @@ public class RabbitMqTransport : AbstractRebusTransport, IDisposable, IInitializ
         catch (Exception exception)
         {
             throw new RebusApplicationException(exception, $"Queue declaration for '{address}' failed");
+        }
+    }
+
+    public void DeclareDelayedMessageExchange(string exchangeName)
+    {
+        try
+        {
+            using var cancellationTokenSource = new CancellationTokenSource(delay: TimeSpan.FromSeconds(60));
+
+            while (true)
+            {
+                try
+                {
+                    var connection = _connectionManager.GetConnection();
+
+                    using var model = connection.CreateModel();
+
+                    model.ExchangeDeclare(
+                        exchange: exchangeName,
+                        type: "x-delayed-message",
+                        durable: true,
+                        autoDelete: false,
+                        arguments: new Dictionary<string, object> { ["x-delayed-type"] = "direct" }
+                    );
+
+                    model.Close();
+                    return;
+                }
+                catch (Exception) when (!cancellationTokenSource.IsCancellationRequested)
+                {
+                    // keep trying a couple of times
+                    Thread.Sleep(1000);
+                }
+            }
+        }
+        catch (Exception exception)
+        {
+            throw new RebusApplicationException(exception, $"Delayed message exchange declaration for '{exchangeName}' failed");
         }
     }
 

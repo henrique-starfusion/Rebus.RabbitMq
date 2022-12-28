@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<RootNamespace>Rebus</RootNamespace>
 		<AssemblyName>Rebus.RabbitMq</AssemblyName>
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFrameworks>.net7.0</TargetFrameworks>
 		<Authors>mookid8000</Authors>
 		<PackageProjectUrl>https://rebus.fm/what-is-rebus/</PackageProjectUrl>
 		<Copyright>Copyright Rebus FM ApS 2012</Copyright>
