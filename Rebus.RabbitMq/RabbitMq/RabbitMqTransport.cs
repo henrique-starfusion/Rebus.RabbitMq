@@ -19,7 +19,7 @@ using Rebus.Config;
 using Rebus.Exceptions;
 using Rebus.Internals;
 using Headers = Rebus.Messages.Headers;
-using System.Net;
+
 // ReSharper disable AccessToDisposedClosure
 
 // ReSharper disable EmptyGeneralCatchClause
